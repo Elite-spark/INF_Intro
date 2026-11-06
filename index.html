@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INF_Smart | System Initialization</title>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600;800&family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --accent: #D4AF72;
+            --accent-rgb: 212, 175, 114;
+            --bg-dark: #0a0c10;
+            --text: #F7F0E4;
+            --muted: rgba(247, 240, 228, 0.6);
+            --line: rgba(239, 218, 181, 0.2);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: var(--bg-dark);
+            background-image: radial-gradient(circle at 50% 30%, rgba(var(--accent-rgb), 0.12), transparent 60%),
+                              url('https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=2200&q=85');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Manrope', 'Outfit', sans-serif;
+            color: var(--text);
+            overflow: hidden;
+        }
+
+        /* Intro Overlay Container */
+        .inf-intro-wrapper {
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 12, 16, 0.88);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .inf-intro-wrapper.fade-out {
+            opacity: 0;
+            transform: scale(1.05);
+            pointer-events: none;
+        }
+
+        /* Logo & Infinity 3D Effect */
+        .intro-brand-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            position: relative;
+            animation: introBounce 1.5s ease-in-out infinite alternate;
+        }
+
+        .intro-infinity {
+            font-size: 72px;
+            line-height: 1;
+            color: var(--accent);
+            text-shadow: 0 0 30px rgba(var(--accent-rgb), 0.8), 0 5px 20px #000;
+        }
+
+        .intro-brand-box h1 {
+            font-size: 32px;
+            letter-spacing: 3px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .intro-brand-box h1 span {
+            color: var(--accent);
+        }
+
+        /* Loading / Initialization Status Bar */
+        .intro-loader-box {
+            width: 280px;
+            margin-top: 35px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .intro-progress-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 99px;
+            overflow: hidden;
+            border: 1px solid var(--line);
+        }
+
+        .intro-progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, rgba(var(--accent-rgb), 0.4), var(--accent));
+            box-shadow: 0 0 15px var(--accent);
+            transition: width 0.1s linear;
+        }
+
+        .intro-status-text {
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            color: var(--muted);
+            text-transform: uppercase;
+        }
+
+        @keyframes introBounce {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-8px); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Cinematic Intro Screen -->
+    <div class="inf-intro-wrapper" id="inf-intro">
+        <div class="intro-brand-box">
+            <!-- يمكنك استبدال رمز اللانهاية  بصورة شعارك (Logo) إذا أردت عبر الوسم <img src="logo.png"> -->
+            <img src="https://i.ibb.co/YBMqK5g3/Logo-3-D-2000-pk-1.png" alt="INF Logo" style="width: 70px; height: 70px; object-fit: contain;">
+            <h1>INF_<span>Smart</span></h1>
+        </div>
+
+        <div class="intro-loader-box">
+            <div class="intro-progress-bar">
+                <div class="intro-progress-fill" id="progress-fill"></div>
+            </div>
+            <span class="intro-status-text" id="status-text">Initializing Neural Core...</span>
+        </div>
+    </div>
+
+    <script>
+        // محاكاة تسلسل تهيئة الأنظمة وتعبئة شريط التحميل بأسلوب احترافي
+        const progressFill = document.getElementById('progress-fill');
+        const statusText = document.getElementById('status-text');
+        const introWrapper = document.getElementById('inf-intro');
+
+        const loadingSteps = [
+            { progress: 20, text: "Establishing Secure IoT Link..." },
+            { progress: 45, text: "Calibrating Audio & Waveform Engine..." },
+            { progress: 75, text: "Syncing Shelly & Weather APIs..." },
+            { progress: 95, text: "Finalizing Cinematic Atmosphere..." },
+            { progress: 100, text: "System Online. Welcome, Creator." }
+        ];
+
+        let currentStep = 0;
+        let currentWidth = 0;
+
+        function runInitialization() {
+            let interval = setInterval(() => {
+                currentWidth += 2;
+                if (currentWidth <= 100) {
+                    progressFill.style.width = currentWidth + '%';
+
+                    // تغيير النصوص حسب نسبة التقدم لتشعر بواقعية النظام
+                    if (currentWidth === 25) statusText.textContent = loadingSteps[1].text;
+                    if (currentWidth === 50) statusText.textContent = loadingSteps[2].text;
+                    if (currentWidth === 75) statusText.textContent = loadingSteps[3].text;
+                    if (currentWidth === 92) statusText.textContent = loadingSteps[4].text;
+                } else {
+                    clearInterval(interval);
+                    // عند اكتمال التحميل، يتم إخفاء الانترو بسلاسة والانتقال للوحة
+                    setTimeout(() => {
+                        introWrapper.classList.add('fade-out');
+                    }, 400);
+                }
+            }, 30); // مدة التحميل الإجمالية حوالي 1.5 ثانية (سريعة ومرنة)
+        }
+
+        window.addEventListener('DOMContentLoaded', runInitialization);
+    </script>
+</body>
+</html>
